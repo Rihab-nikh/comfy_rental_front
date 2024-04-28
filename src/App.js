@@ -6,6 +6,7 @@ import UserComponent from './Components/UserComponent';
 import Register from './Components/Auth/Register';
 import Login from './Components/Auth/Login';
 import MainPage from './Components/MainPage';
+import LocalDetails from './Components/Local/LocalDetails';
 
 const App = () => {
 
@@ -18,6 +19,8 @@ const App = () => {
         <Route path="/CreateUser" element={<CreateUserForm />} />
           <Route path="/Auth/Login" element={<Login />} />
         <Route path="/Auth/Register" element={<Register />} />
+        <Route path="/Local/LocalDetails" element={<LocalDetails />} />
+        
       </Routes>
     </Router>
   );
