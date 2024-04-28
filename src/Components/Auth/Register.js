@@ -10,20 +10,21 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [imgPath, setImgPath] = useState('');
-  const [showPopup, setShowPopup] = useState(false); 
-  const [popupMessage, setPopupMessage] = useState(''); 
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
   const navigate = useNavigate();
-  const [cookieValue] = useState(Cookies.get('UserId') || ''); 
+  const [cookieValue] = useState(Cookies.get('UserId') || '');
 
   useEffect(() => {
     const cookieValue = Cookies.get('UserId');
     if (cookieValue) {
-      if (cookieValue !== null) { 
+      if (cookieValue !== null) {
         console.log("Cookie 'UserId' exists with value:", cookieValue);
         navigate('/');
-      } 
-    } 
+      }
+    }
   }, [cookieValue]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -34,25 +35,30 @@ const Register = () => {
         lastName,
         email,
         password,
-        imgPath,
+        imgPath, 
       });
 
-      if(response.data === "Image already exist" || response.data === "Email Already Exist" || response.data === "Error"){
-        setShowPopup(true); 
+      if (
+        response.data === 'Image already exist' ||
+        response.data === 'Email Already Exist' ||
+        response.data === 'Error'
+      ) {
+        setShowPopup(true);
         setPopupMessage(response.data);
-      }else{
-      Cookies.set("UserId", response.data);
-      Cookies.set("UserFN", firstName);
-      Cookies.set("UserLN", lastName);
-      Cookies.set("UserEm", email);
-      Cookies.set("UserIM", imgPath);
-      navigate('/');}
+      } else {
+        Cookies.set('UserId', response.data);
+        Cookies.set('UserFN', firstName);
+        Cookies.set('UserLN', lastName);
+        Cookies.set('UserEm', email);
+        navigate('/');
+      }
     } catch (error) {
       console.error('User:', error.message, 'test');
-      setShowPopup(true); 
-        setPopupMessage('Connexion Error');
-      }
+      setShowPopup(true);
+      setPopupMessage('Connexion Error');
+    }
   };
+
   return (
     <section className="text-center text-lg-start">
       <div className="card mb-3">
@@ -67,6 +73,8 @@ const Register = () => {
           <div className="col-lg-8">
             <div className="card-body py-5 px-md-5">
               <h1 className="mb-4 text-center title mb-3">Register</h1>
+              <ImageUpload setImgPath={setImgPath} />
+
               <form onSubmit={handleSubmit}>
                 <div className="row mb-4">
                   <div className="col-md-6">
@@ -118,32 +126,9 @@ const Register = () => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <div className="form-group mb-4">
-                  <label htmlFor="imgPath">Image Path</label>
-                  <input
-                    type="text"
-                    id="imgPath"
-                    className="form-control"
-                    value={imgPath}
-                    onChange={(e) => setImgPath(e.target.value)}
-                  />
-                </div>
-                <div className="row mb-4">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                    <button
-                        type="submit"
-                        className="btn btn-primary btn-block mb-4">
-                        Register
-                    </button>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                    You Already have an account 
-                        <a href='/Auth/Login' className=''> Login?</a>
-                    </div>
-                  </div>
+                <button type="submit" className="btn btn-primary btn-block mb-4">Register</button>
+                <div className="form-group">
+                  You already have an account. <a href='/Auth/Login' className=''> Login?</a>
                 </div>
                 {showPopup && (
                   <div className="alert alert-danger" role="alert">
@@ -158,4 +143,33 @@ const Register = () => {
     </section>
   );
 };
+//hna l form dyal l image
+const ImageUpload = ({ setImgPath }) => {
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post('http://localhost:8080/Auth/ProfileImage/upload', formData);
+      const imagePath = response.data; 
+      setImgPath(imagePath);
+    } catch (error) {
+      console.error('Error uploading image:', error.message);
+    }
+  };
+
+  return (
+    <div className="form-group mb-4">
+      <label htmlFor="imgPath">Image Path</label>
+      <input
+        type="file"
+        id="imgPath"
+        className="form-control"
+        onChange={handleImageChange}
+      />
+    </div>
+  );
+};
+
 export default Register;
