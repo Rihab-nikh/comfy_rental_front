@@ -65,7 +65,7 @@ const Register = () => {
         <div className="row g-0 align-items-center">
           <div className="col-lg-4 d-none d-lg-flex">
             <img
-              src="https://mdbootstrap.com/img/new/ecommerce/vertical/004.jpg"
+              src="/Images/Register.gif"
               alt="Trendy Pants and Shoes"
               className="w-100 rounded"
             />

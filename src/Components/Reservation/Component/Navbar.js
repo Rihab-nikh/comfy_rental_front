@@ -1,0 +1,36 @@
+import React from "react";
+import Cookies from "js-cookie";
+
+const Navbar = ({cookie, handleLogin, handleLogout}) => {
+    return (
+        <nav className="row navbar px-5 shadow-sm bg-body-tertiary fixed-top">
+            <div className="container-fluid">
+                <a className="navbar-brand" href="/"><img style={{width: 8 + 'em'}}
+                                                          src="/Images/logoBlack.png" alt="Logo"/></a>
+                <div className="row justify-content-end">
+                    <div className="col-auto">
+                        <a type="button" className="btn text-decoration-none btn-light">Put my accommodation on Comfy Rental</a>
+                    </div>
+                    <div className="col-auto">
+                        <div className="dropdown-center">
+                            <button style={{width: 3 + 'em', height: 2.2+ 'em'}} className="btn btn-outline-dark dropdown-toggler" type="button" data-bs-toggle="dropdown">
+                                <span style={{width: 3 + 'em', height: 2.2+ 'em'}} className="bi bi-person-lines-fill"></span>
+                            </button>
+                            <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-star">
+                                {cookie ? (
+                                        <li><a onClick={handleLogout} className="dropdown-item">Logout</a></li>
+                                ) : (
+                                    <React.Fragment>
+                                        <li><a className="dropdown-item" href="/Auth/Register">Register</a></li>
+                                        <li><a onClick={handleLogin} className="dropdown-item">Login</a></li>
+                                    </React.Fragment>                           )}
+                                 <hr/>
+                                <li><a className="dropdown-item" href="#">Put my accommodation on Comfy Rental</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>);
+};
+export default Navbar;

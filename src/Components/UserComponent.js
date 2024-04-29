@@ -19,6 +19,7 @@ const UserComponent = () => {
 
     return (
         <div>
+
           <div className="container bg-light ">
               <div className="row">
                 <div className="col-9">
@@ -59,15 +60,6 @@ const UserComponent = () => {
                      </div>
                   </div>
                   <div className="col-6">
-                      <div className="card m-2">
-                          <div className="card-body">
-                              <h5 className="card-title">For reservation</h5>
-                              <p> ghade deri hanaya dakchi li deja endk</p>
-                              <input className="row" />
-                              <input className="row" /><input className="row" /><input className="row" /><input className="row" />
-                              <button>Submit </button>
-                          </div>
-                      </div>
                   </div>
               </div>
           </div>
