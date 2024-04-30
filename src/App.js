@@ -7,7 +7,7 @@ import Register from './Components/Auth/Register';
 import Login from './Components/Auth/Login';
 import MainPage from './Components/MainPage';
 import LocalDetails from './Components/Local/LocalDetails';
-
+import MyProfile from './Components/Profile/MyProfile';
 const App = () => {
 
   return (
@@ -17,10 +17,10 @@ const App = () => {
         <Route path="/User/:id" element={<UserDetailComponent />} />
         <Route path="/User" element={<UserComponent />} />
         <Route path="/CreateUser" element={<CreateUserForm />} />
-          <Route path="/Auth/Login" element={<Login />} />
+        <Route path="/Auth/Login" element={<Login />} />
         <Route path="/Auth/Register" element={<Register />} />
-        <Route path="/Local/LocalDetails" element={<LocalDetails />} />
-        
+        <Route path="/Local/LocalDetails/:id" element={<LocalDetails />} />
+        <Route path="/Profile/show/:id" element={<MyProfile />} />
       </Routes>
     </Router>
   );

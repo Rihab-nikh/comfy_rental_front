@@ -1,110 +1,113 @@
-import React from 'react';
-import { Carousel } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import image1 from './Images/image1.jpg';
 import image2 from './Images/image2.jpg';
 import image3 from './Images/image3.jpg';
 import image4 from './Images/image4.jpg';
-import './LocalDetails.css';
-import DatePicker from "react-datepicker";
-import "react-datepicker/src/stylesheets/datepicker.scss";
 
-class LocalDetails extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            arrivalDate: null,
-            departureDate: null
+const LocalDetails = () => {
+    const { id } = useParams();
+    const [local, setLocal] = useState(null);
+    const [arrivalDate, setArrivalDate] = useState(null);
+    const [departureDate, setDepartureDate] = useState(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/local/LocalDetails/${id}`);
+                setLocal(response.data);
+                console.log("HERRRREEEEEE" + response.data.name)
+            } catch (error) {
+                console.error('Error fetching Local:', error);
+            }
         };
+
+        fetchData();
+    }, [id]);
+
+    const images = [image1, image2, image3, image4];
+    if (!local) {
+        return <div>Loading...</div>;
     }
+    return (
+        <div className="container bg-light">
+            <div className="row">
+                <div className="col-9">
+                    <h1>{local.name}</h1>
+                </div>
+                <div className="col-3">
+                    <p>Add to favorite</p>
+                </div>
 
-    render() {
-        const images = [image1, image2, image3, image4];
-
-        return (
-            <div>
-                <div className="title-container">
-                    <div>
-                        <h1 className="title">Logement entier : hébergement - Larbaa Beni Hassen, Maroc</h1>
-                        <h6>6 voyageurs 3 chambres 5 lits 2 salles de bain</h6>
+            </div>
+            <div className="row">
+                <div className="col-6">
+                    <img className="m-1 img-fluid" src={images[0]} alt="Image 1" />
+                </div>
+                <div className="col-6">
+                    <div className="row">
+                        <div className="col-6">
+                            <img className="m-1 img-fluid" src={images[0]} alt="Image 2" />
+                        </div>
+                        <div className="col-6">
+                            <img className="m-1 img-fluid" src={images[1]} alt="Image 3" />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-6">
+                            <img className="m-1 img-fluid" src={images[2]} alt="Image 4" />
+                        </div>
+                        <div className="col-6">
+                            <img className="m-1 img-fluid" src={images[3]} alt="Image 5" />
+                        </div>
                     </div>
                 </div>
-                <div className="carousel-wrapper">
-                    <div className="carousel-container">
-                        <Carousel>
-                            {images.map((image, index) => (
-                                <Carousel.Item key={index}>
-                                    <img
-                                        className="d-block w-100 rounded-carousel-image"
-                                        src={image}
-                                        alt=""
-                                    />
-                                </Carousel.Item>
-                            ))}
-                        </Carousel>
+            </div>
+            <div className="row">
+                <div className="col-6">
+                    <div className="m-2">
+                        <h3>Detail</h3>
+                        <p> {local.descLocal}</p>
                     </div>
-                    <div class="info-container">
-    <div class="price-section">
-        <p class="price">120 €</p>
-        <p class="price-info">par nuit</p>
-    </div>
-    <div class="booking-section">
-        <div class="booking-details">
-            <div class="booking-options">
-                <div class="booking-option">
-                    <p class="date-label">ARRIVÉE</p>
-                    <DatePicker
-                        selected={this.state.arrivalDate}
-                        onChange={date => this.setState({ arrivalDate: date })}
-                        placeholderText="Select date"
-                    />
                 </div>
-                <div class="booking-option">
-                    <p class="date-label">DÉPART</p>
-                    <DatePicker
-                        selected={this.state.departureDate}
-                        onChange={date => this.setState({ departureDate: date })}
-                        placeholderText="Select date"
-                    />
-                </div>
-                <div class="booking-option">
-                    <p class="guest-label">VOYAGEURS</p>
-                    <select class="guest-select">
-                        <option value="1">1 voyageur</option>
-                        <option value="2">2 voyageurs</option>
-                        <option value="3">3 voyageurs</option>
-                        <option value="4">4 voyageurs</option>
-                        <option value="5">5 voyageurs</option>
-                        <option value="6">6 voyageurs</option>
-                    </select>
+                <div className="col-6">
+                    <div className="card m-2">
+                        <div className="card-body">
+                        <p className="date-label">Arrival</p>
+
+                            <DatePicker
+                            
+                                selected={arrivalDate}
+                                onChange={date => this.setState({ arrivalDate: date })}
+                                placeholderText="Select date"
+                            />
+                            <div className="booking-option">
+                                <p className="date-label">Departure </p>
+                                <DatePicker
+                                    selected={departureDate}
+                                    onChange={date => this.setState({ departureDate: date })}
+                                    placeholderText="Select date"
+                                />
+                            </div>
+                            <div class="subtotal-section">
+                                <p class="subtotal">{local.price} € Per night</p>
+                                
+                            </div>
+                            
+                            <div class="reservation-section">
+                                <button class="reserve-button">Réserver</button>
+                                <p class="reservation-info">Aucun montant ne vous sera débité pour le moment</p>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        
-    </div>
-    <div class="subtotal-section">
-        <p class="subtotal">120 € x 5 nuits</p>
-        <button class="price-detail-button">Afficher le détail du prix</button>
-        <p class="subtotal-amount">600 €</p>
-    </div>
-    <div class="service-fee-section">
-        <p class="fee-label">Frais de service Airbnb</p>
-        <button class="price-detail-button">Afficher le détail du prix</button>
-        <p class="fee-amount">102 €</p>
-    </div>
-    <div class="total-section">
-        <p class="total-label">Total</p>
-        <p class="total-amount">702 €</p>
-    </div>
-                        <div class="reservation-section">
-                            <button class="reserve-button">Réserver</button>
-                            <p class="reservation-info">Aucun montant ne vous sera débité pour le moment</p>
-                        </div>                       
-                    </div>
-
-                </div>
-            </div>
-        );
-    }
+    );
 }
 
 export default LocalDetails;

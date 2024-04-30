@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
-  const [cookieValue, setCookieValue] = useState(Cookies.get('UserId') || ''); 
+  const [cookieValue, setCookieValue] = useState(Cookies.get('UserId') || '');
   const navigate = useNavigate();
 
-  
+
   const handleLogout = () => {
     Cookies.remove('UserId');
     setCookieValue('');
   };
 
   const handleLogin = () => {
-    navigate('/Auth/Login'); 
+    navigate('/Auth/Login');
   };
-
+  const Profile = () => {
+    if (cookieValue) {
+      navigate(`/Profile/show/${cookieValue}`);
+    } else {
+      navigate('/');
+    }
+  };
   return (
     <div>
       <h1>Welcome to Dashboard</h1>
@@ -25,6 +31,7 @@ const MainPage = () => {
       ) : (
         <button onClick={handleLogin}>Login</button>
       )}
+      <button onClick={Profile}>Profile</button>
     </div>
   );
 };
