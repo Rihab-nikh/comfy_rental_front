@@ -21,7 +21,7 @@ const Navbar = ({cookie,cookieValue, handleLogin, handleLogout}) => {
                             <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-star">
                                 {cookieValue ? (
                                     <React.Fragment>
-                                        <li><a href={`/Account/${userId}`} className="dropdown-item">{userFullName}</a></li>
+                                        <li><a href={`/Profile/${userId}`} className="dropdown-item">{userFullName}</a></li>
                                         <li><a onClick={handleLogout} className="dropdown-item">Logout</a></li>
                                     </React.Fragment>
                                 ) : (

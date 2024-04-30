@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
 import CreateUserForm from './Components/CreateUserForm';
 import UserDetailComponent from './Components/UserDetailComponent';
 import UserComponent from './Components/UserComponent';
 import Register from './Components/Auth/Register';
 import Login from './Components/Auth/Login';
 import MainPage from './Components/Reservation/MainPage';
+import LocalDetails from "./Components/Reservation/LocalDetails";
+import MyProfile from "./Components/Profile/MyProfile";
 
 const App = () => {
 
@@ -21,6 +21,8 @@ const App = () => {
         <Route path="/CreateUser" element={<CreateUserForm />} />
         <Route path="/Auth/Login" element={<Login />} />
         <Route path="/Auth/Register" element={<Register />} />
+        <Route path="/Local/:id" element={<LocalDetails />} />
+        <Route path="/Profile/:id" element={<MyProfile />} />
       </Routes>
     </Router>
   );

@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.carousel-container {
+  flex: 1;
+  margin-right: 20px; /* Adjust as needed */
+}
+
+.info-container {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .carousel-wrapper {
+      flex-direction: column;
+  }
+
+  .carousel-container {
+      margin-right: 0;
+      margin-bottom: 20px; /* Adjust as needed */
+  }
+}

@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 const card = ({localId,imgList,title,price,DateStart,DateEnd}) => {
     return (
-        <Link to={`/LocalDetail/${localId}`} data-interval="false" className="card text-decoration-none border-0 col-3 p-2 mb-3 mx-auto" style={{ maxWidth: "18rem" }}>
+        <Link to={`/Local/${localId}`} data-interval="false" className="card text-decoration-none border-0 col-3 p-2 mb-3 mx-auto" style={{ maxWidth: "18rem" }}>
             <div id={`carouselExample${localId}`} className=" carousel slide" data-bs-ride="carousel">
                 <div className="carousel-indicators">
                     <button type="button" data-bs-target={`#carouselExample${localId}Indicators`} data-bs-slide-to="0"
