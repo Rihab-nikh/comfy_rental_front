@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import image1 from './Images/image1.jpg';
-import image2 from './Images/image2.jpg';
-import image3 from './Images/image3.jpg';
-import image4 from './Images/image4.jpg';
+import image1 from '../Local/Images/image1.jpg';
+import image2 from '../Local/Images/image2.jpg';
+import image3 from '../Local/Images/image3.jpg';
+import image4 from '../Local/Images/image4.jpg';
 
 const LocalDetails = () => {
     const { id } = useParams();
@@ -18,8 +18,8 @@ const LocalDetails = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/local/LocalDetails/${id}`);
-                setLocal(response.data);
-                console.log("HERRRREEEEEE" + response.data.name)
+                setLocal(response.data)
+                console.log(local.imgPathList)
             } catch (error) {
                 console.error('Error fetching Local:', error);
             }
@@ -28,7 +28,7 @@ const LocalDetails = () => {
         fetchData();
     }, [id]);
 
-    const images = [image1, image2, image3, image4];
+    const images = local.imgPathList;
     if (!local) {
         return <div>Loading...</div>;
     }
@@ -45,23 +45,23 @@ const LocalDetails = () => {
             </div>
             <div className="row">
                 <div className="col-6">
-                    <img className="m-1 img-fluid" src={images[0]} alt="Image 1" />
+                    <img className="m-1 img-fluid" src={images[0]} alt="Image 1"/>
                 </div>
                 <div className="col-6">
                     <div className="row">
                         <div className="col-6">
-                            <img className="m-1 img-fluid" src={images[0]} alt="Image 2" />
+                            <img className="m-1 img-fluid" src={images[1]} alt="Image 2" />
                         </div>
                         <div className="col-6">
-                            <img className="m-1 img-fluid" src={images[1]} alt="Image 3" />
+                            <img className="m-1 img-fluid" src={images[2]} alt="Image 3" />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-6">
-                            <img className="m-1 img-fluid" src={images[2]} alt="Image 4" />
+                            <img className="m-1 img-fluid" src={images[3]} alt="Image 4" />
                         </div>
                         <div className="col-6">
-                            <img className="m-1 img-fluid" src={images[3]} alt="Image 5" />
+                            <img className="m-1 img-fluid" src={images[4]} alt="Image 5" />
                         </div>
                     </div>
                 </div>
