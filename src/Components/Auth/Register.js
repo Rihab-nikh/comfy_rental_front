@@ -73,7 +73,6 @@ const Register = () => {
           <div className="col-lg-8">
             <div className="card-body py-5 px-md-5">
               <h1 className="mb-4 text-center title mb-3">Register</h1>
-              <ImageUpload setImgPath={setImgPath} />
 
               <form onSubmit={handleSubmit}>
                 <div className="row mb-4">
@@ -105,7 +104,7 @@ const Register = () => {
                   </div>
                 </div>
                 <div className="form-group mb-4">
-                  <label htmlFor="email">Email address</label>
+                  <label htmlFor="email">Email address<span className="text-danger">*</span></label>
                   <input
                     type="email"
                     id="email"
@@ -116,7 +115,7 @@ const Register = () => {
                   />
                 </div>
                 <div className="form-group mb-4">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">Password<span className="text-danger">*</span></label>
                   <input
                     type="password"
                     id="password"
@@ -125,6 +124,8 @@ const Register = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  <ImageUpload setImgPath={setImgPath} />
+
                 </div>
                 <button type="submit" className="btn btn-primary btn-block mb-4">Register</button>
                 <div className="form-group">
@@ -160,9 +161,10 @@ const ImageUpload = ({ setImgPath }) => {
   };
 
   return (
-    <div className="form-group mb-4">
-      <label htmlFor="imgPath">Image Path</label>
+    <div className="form-group my-4">
+      <label htmlFor="imgPath">Image Path<span className="text-danger">*</span></label>
       <input
+          required
         type="file"
         id="imgPath"
         className="form-control"

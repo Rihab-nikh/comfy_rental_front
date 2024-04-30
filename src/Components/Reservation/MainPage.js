@@ -7,8 +7,10 @@ import TypeList from "./Component/TypeList";
 import Navbar from "./Component/Navbar";
 import CardList from "./Component/CardList"
 import FilterButton from "./Component/FilterButton";
+import Footer from "./Component/Footer";
 const MainPage = () => {
-  const [cookieValue, setCookieValue] = useState(Cookies.get('UserId') || ''); 
+  const [cookieValue, setCookieValue] = useState(Cookies.get('UserId') || '');
+  const[searchContent,setSearchContent]=useState('');
   const navigate = useNavigate();
 
   
@@ -20,30 +22,20 @@ const MainPage = () => {
   const handleLogin = () => {
     navigate('/Auth/Login'); 
   };
-
-  return (
+    const searchChange = (event) => {
+        setSearchContent(event.target.value);
+    };
+    return (
       <div className="container">
-          <Navbar cookie={cookieValue}  handleLogin={handleLogin} handleLogout={handleLogout} />
+          <Navbar cookie={Cookies} cookieValue={cookieValue}  handleLogin={handleLogin} handleLogout={handleLogout} />
           <div className="row container mt-5 justify-content-center">
               <div className="row">
                   <div className="col-9"> <TypeList/></div>
-                  <div className="col-3"><FilterButton/></div>
+                  <div className="col-3"><FilterButton searchChange={searchChange}/></div>
               </div>
-              <CardList/>
-              <div className="col-md-8">
-                  <h1>Welcome to Dashboard</h1>
-                  <p>UserId: {cookieValue}</p>
-                  {cookieValue ? (
-                      <button onClick={handleLogout} className="btn btn-danger">
-                          Logout
-                      </button>
-                  ) : (
-                      <button onClick={handleLogin} className="btn btn-primary">
-                          Login
-                      </button>
-                  )}
-              </div>
+              <CardList searchContent={searchContent}/>
           </div>
+          <Footer/>
       </div>  );
 };
 

@@ -31,23 +31,23 @@ const UserComponent = () => {
               </div>
               <div className="row">
                   <div className="col-6">
-                      <img className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
+                      <img style={{width: 200 + 'em', height: 31+ 'em'}} className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
                   </div>
                   <div className="col-6">
                       <div className="row">
                           <div className="col-6">
-                              <img className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
+                              <img style={{width: 90 + 'em', height: 15+ 'em'}} className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
                           </div>
                           <div className="col-6">
-                              <img className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
+                              <img  style={{width: 90 + 'em', height: 15+ 'em'}} className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
                           </div>
                       </div>
                       <div className="row">
                           <div className="col-6">
-                              <img className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
+                              <img  style={{width: 90 + 'em', height: 15+ 'em'}} className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
                           </div>
                           <div className="col-6">
-                              <img className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
+                              <img  style={{width: 90 + 'em', height: 15+ 'em'}} className="m-1 img-fluid" src="https://a0.muscache.com/im/pictures/299cf8e2-cd10-44bb-98a9-adc0f50f7cb0.jpg?im_w=720"/>
                           </div>
                       </div>
                   </div>
