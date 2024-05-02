@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { Link } from 'react-router-dom';
 
 const UserComponent = () => {
     const [users, setUsers] = useState([]);
