@@ -52,7 +52,6 @@ const CardList=(({searchContent})=>{
             {cardLister}
             {cardLister}
             {cardLister}
-
         </div>
     );
 });

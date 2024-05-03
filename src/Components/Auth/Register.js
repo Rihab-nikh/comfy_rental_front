@@ -9,7 +9,7 @@ const Register = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [imgPath, setImgPath] = useState('');
+  const [imgPath, setImgPath] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const Register = () => {
         lastName,
         email,
         password,
-        imgPath, 
+        imgPath,
       });
 
       if (
@@ -46,7 +46,16 @@ const Register = () => {
         setShowPopup(true);
         setPopupMessage(response.data);
       } else {
-        Cookies.set('UserId', response.data);
+        const id = response.data;
+        const formData = new FormData();
+        formData.append('file', imgPath);
+        try {
+          const response = await axios.post(`http://localhost:8080/Auth/ProfileImage/upload/${id}`, formData);
+          console.log(response.data)
+        } catch (error) {
+          console.error('Error uploading image:', error.message);
+        }
+        Cookies.set('UserId', id);
         Cookies.set('UserFN', firstName);
         Cookies.set('UserLN', lastName);
         Cookies.set('UserEm', email);
@@ -57,6 +66,11 @@ const Register = () => {
       setShowPopup(true);
       setPopupMessage('Connexion Error');
     }
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    setImgPath(file);
   };
 
   return (
@@ -124,8 +138,16 @@ const Register = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <ImageUpload setImgPath={setImgPath} />
-
+                  <div className="form-group my-4">
+                    <label htmlFor="imgPath">Image Path<span className="text-danger">*</span></label>
+                    <input
+                        required
+                        type="file"
+                        id="imgPath"
+                        className="form-control"
+                        onChange={handleImageChange}
+                    />
+                  </div>
                 </div>
                 <button type="submit" className="btn btn-primary btn-block mb-4">Register</button>
                 <div className="form-group">
@@ -142,35 +164,6 @@ const Register = () => {
         </div>
       </div>
     </section>
-  );
-};
-//hna l form dyal l image
-const ImageUpload = ({ setImgPath }) => {
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const response = await axios.post('http://localhost:8080/Auth/ProfileImage/upload', formData);
-      const imagePath = response.data; 
-      setImgPath(imagePath);
-    } catch (error) {
-      console.error('Error uploading image:', error.message);
-    }
-  };
-
-  return (
-    <div className="form-group my-4">
-      <label htmlFor="imgPath">Image Path<span className="text-danger">*</span></label>
-      <input
-          required
-        type="file"
-        id="imgPath"
-        className="form-control"
-        onChange={handleImageChange}
-      />
-    </div>
   );
 };
 

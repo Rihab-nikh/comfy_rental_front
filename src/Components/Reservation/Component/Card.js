@@ -14,6 +14,8 @@ const card = ({localId,imgList,title,price,DateStart,DateEnd}) => {
                             aria-label="Slide 3"></button>
                     <button type="button" data-bs-target={`#carouselExample${localId}Indicators`} data-bs-slide-to="3"
                             aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target={`#carouselExample${localId}Indicators`} data-bs-slide-to="4"
+                             aria-label="Slide 5"></button>
                 </div>
 
                 <div className="carousel-inner">

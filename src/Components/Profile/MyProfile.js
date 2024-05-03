@@ -5,9 +5,8 @@ import { useParams } from 'react-router-dom';
 
 const MyProfile = () => {
     const [user, setUser] = useState(null); 
-    const { id } = useParams(); 
-    
-    
+    const { id } = useParams();
+
     useEffect(() => {
         axios.get(`http://localhost:8080/Auth/show/${id}`)
             .then(response => {
@@ -31,9 +30,9 @@ const MyProfile = () => {
               <div className="card">
                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
                   <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
-                    <img src={user.imgPath}
+                    <img src={`data:image/jpeg;base64,${user.img}`}
                          alt="Generic placeholder image" className="img-fluid img-thumbnail mt-4 mb-2"
-                         style={{ width: '150px', zIndex: '1' }}/>
+                         style={{  height: '180px', zIndex: '1' }}/>
                     <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-dark"
                             data-mdb-ripple-color="dark"
                             style={{ zIndex: '1' }}>
