@@ -74,7 +74,11 @@ const LocalDetails = () => {
     }
 
     if (!local) {
-        return <div><h1>Loading ....</h1></div>;
+        return <div className="h-100 w-100 text-center  m-auto" style={{height:30+"em"}}>
+            <div className="spinner-border" style={{width:"3em", height:"3em"}} role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
+        </div>;
     }
     else {
         const images = local.imgPathList;
@@ -99,27 +103,27 @@ const LocalDetails = () => {
                         <div className="row m-3 border-1">
                             <div className="col-6">
                                 <img style={{width: "40em", height: "28.5em"}} className="m-1 rounded-1 img-fluid"
-                                     src={images[0]} alt="Image 1"/>
+                                     src={`data:image/png;base64,${images[0]}`} alt="Image 1"/>
                             </div>
                             <div className="col-6">
                                 <div className="row">
                                     <div className="col-6">
                                         <img style={{width: "40em", height: "14em"}} className="m-1 rounded-1 img-fluid"
-                                             src={images[1]} alt="Image 2"/>
+                                             src={`data:image/png;base64,${images[1]}`} alt="Image 2"/>
                                     </div>
                                     <div className="col-6">
                                         <img style={{width: "40em", height: "14em"}} className="m-1 rounded-1 img-fluid"
-                                             src={images[2]} alt="Image 3"/>
+                                             src={`data:image/png;base64,${images[2]}`} alt="Image 3"/>
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-6">
                                         <img style={{width: "40em", height: "14em"}} className="m-1 rounded-1 img-fluid"
-                                             src={images[3]} alt="Image 4"/>
+                                             src={`data:image/png;base64,${images[3]}`} alt="Image 4"/>
                                     </div>
                                     <div className="col-6">
                                         <img style={{width: "40em", height: "14em"}} className="m-1 rounded-1 img-fluid"
-                                             src={images[4]} alt="Image 5"/>
+                                             src={`data:image/png;base64,${images[4]}`} alt="Image 5"/>
                                     </div>
                                 </div>
                             </div>

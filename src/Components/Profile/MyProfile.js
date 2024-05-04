@@ -121,8 +121,12 @@ const MyProfile = () => {
                         <div className="card">
                             <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
                                 <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
-                                    <img src={user.imgPath} alt="Generic placeholder image" className="img-fluid img-thumbnail mt-4 mb-2" style={{ width: '150px', zIndex: '1' }} />
-
+                                    <img
+                                        src={`data:image/png;base64,${user.img}`}
+                                        alt="Generic placeholder image"
+                                        className="img-fluid img-thumbnail mt-4 mb-2"
+                                        style={{ width: '150px', zIndex: '1' }}
+                                    />
                                 </div>
                                 {user ? (
                                     <div className="ms-3" style={{ marginTop: '130px' }}>
@@ -219,7 +223,7 @@ const MyProfile = () => {
                                                         <button
                                                             type="button"
                                                             className="btn btn-danger"
-                                                            onClick={() => handleCancelBooking(booking.idB)}> 
+                                                            onClick={() => handleCancelBooking(booking.idB)}>
                                                             Cancel
                                                         </button>
                                                     </td>
@@ -248,7 +252,7 @@ const MyProfile = () => {
                                         <div key={index} className="card mb-3">
                                             <div className="row g-0">
                                                 <div className="col-md-4">
-                                                    <img src={hosting.imgPathList[0]} className="img-fluid rounded-start" alt="Hosting" />
+                                                    <img src={`data:image/png;base64,${hosting.imgPathList[0]}`} className="img-fluid rounded-start" alt="Hosting" />
                                                 </div>
                                                 <div className="col-md-8">
                                                     <div className="card-body">

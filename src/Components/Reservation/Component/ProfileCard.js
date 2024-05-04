@@ -10,7 +10,7 @@ function ProfileCard({imgSrc,name}) {
                             <div className="row col-12 text-black">
                                 <div className=" col-6">
                                     <img
-                                        src={imgSrc}
+                                        src={`data:image/png;base64,${imgSrc}`}
                                         alt="Generic placeholder image"
                                         className="img-fluid"
                                         style={{ width: "180px", borderRadius: "10px" }}

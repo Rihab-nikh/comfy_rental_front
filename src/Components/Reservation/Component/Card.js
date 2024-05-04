@@ -21,7 +21,7 @@ const card = ({localId,imgList,title,price,DateStart,DateEnd}) => {
                 <div className="carousel-inner">
                     {imgList.map((img, index) => (
                         <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
-                            <img style={{width: 25 + 'em', height: 15+ 'em'}} src={img} className="rounded d-block w-100"  alt={`Slide ${index + 1}`} />
+                            <img style={{width: 25 + 'em', height: 15+ 'em'}} src={`data:image/png;base64,${img}`} className="rounded d-block w-100"  alt={`Slide ${index + 1}`} />
                         </div>
                     ))}
                 </div>

@@ -36,8 +36,7 @@ const CardList=(({searchContent})=>{
 
     const cardLister = cards.map((e, index) => (
         <Card
-            key={index}
-            localId={index}
+            localId={e.idL}
             imgList={e.imgList}
             title={e.title}
             price={e.price}
@@ -48,9 +47,6 @@ const CardList=(({searchContent})=>{
 
     return (
         <div className="container d-flex mb-3 row mt-2">
-            {cardLister}
-            {cardLister}
-            {cardLister}
             {cardLister}
         </div>
     );

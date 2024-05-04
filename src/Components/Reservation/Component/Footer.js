@@ -43,8 +43,11 @@ const Footer=(()=>{
             </section>
             <div className="text-center p-4" style={{backgroundColor:"rgba(0, 0, 0, 0.05)"}}>
                 © 2024 Copyright:
-                <a className="text-reset fw-bold text-decoration-none" href="https://github.com/yahya-fk/ComfyRental/">Github
-                    Repository</a>
+                <a className="text-reset fw-bold text-decoration-none"
+                   href="https://github.com/yahya-fk/ComfyRental/"> BACK-END</a> -
+                <a className="text-reset fw-bold text-decoration-none"
+                   href="https://github.com/Rihab-nikh/comfy_rental_front"> FRONT-END</a>
+
             </div>
         </footer>
     );
