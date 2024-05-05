@@ -15,8 +15,8 @@ const MyProfile = () => {
     const [password, setPassword] = useState('');
     const [myBookings, setMyBookings] = useState(false);
     const [myHostings, setMyHostings] = useState(false);
-
-
+    const [myRequests, setMyRequests] = useState([]);
+    const [showRequests, setShowRequests] = useState(false);
 
     useEffect(() => {
         if (!cookieValue) {
@@ -57,6 +57,59 @@ const MyProfile = () => {
     const handleEditProfile = () => {
         setParameters(true);
     };
+    const handleMyRequests = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.get(`http://localhost:8080/Hostings/ShowAllRequests/${id}`);
+
+            // Initialize an object to store localId and guestId pairs
+            const idPairs = {};
+
+            const requestsArray = Object.entries(response.data).map(([localTitle, guestName]) => {
+                // Extract local ID from the title
+                const localId = localTitle.match(/\d+/)[0]; // Extract digits from the title
+
+                // Extract guest ID from the guestName
+                const userIdMatch = guestName.match(/User ID: (\w+)/);
+                const userId = userIdMatch ? userIdMatch[1] : ''; // Extract user ID if present
+
+                // Check if localId already exists in idPairs
+                if (idPairs.hasOwnProperty(localId)) {
+                    // If localId exists, append the new userId to the existing value
+                    idPairs[localId] += `, ${userId}`;
+                } else {
+                    // If localId doesn't exist, add it as a new key with userId as the value
+                    idPairs[localId] = userId;
+                }
+
+                const requestObject = {
+                    localId: localId,
+                    localName: localTitle.split(' - ')[0], // Extract local name from the title
+                    guestName: guestName,
+                    guestId: userId // Set guestId to extracted user ID
+                };
+
+                // Print the extracted data to the console
+                console.log("Extracted Data:", requestObject);
+
+                return requestObject;
+            });
+
+            // Print the idPairs object to the console
+            console.log("ID Pairs:", idPairs);
+
+            setMyRequests(requestsArray);
+            setShowRequests(true);
+            setParameters(false);
+        } catch (error) {
+            console.error('Error fetching requests:', error);
+        }
+    };
+
+
+    const handleHideRequests = () => {
+        setShowRequests(false); // Set showRequests to false to hide the requests table
+    };
     const handleMyBookings = async (event) => {
         event.preventDefault();
         try {
@@ -85,16 +138,58 @@ const MyProfile = () => {
             console.error('Error fetching hostings:', error);
         }
     };
+    const handleAcceptRequest = async (localId, guestId) => {
+    try {
+        // Log the data before making the request
+        console.log("Data to be sent for accepting request:", { localId, guestId });
+    
+        // Make a PUT request with guestId in the request body
+        await axios.put(`http://localhost:8080/Hostings/AcceptRequest/${localId}`, null, {
+            params: {
+                guestId,
+            },
+        });
+
+        // Update the state or perform any other necessary actions
+        console.log("Request accepted:", localId);
+
+        // Remove the accepted request from myRequests
+        const updatedRequests = myRequests.filter(request => request.localId !== localId);
+        setMyRequests(updatedRequests);
+
+    } catch (error) {
+        console.error('Error accepting request:', error);
+    }
+};
+const handleCancelRequest = async (localId, guestId) => {
+    
+    try {
+        await axios.delete(`http://localhost:8080/Hostings/RejectRequest/${localId}?guestId=${guestId}`);
+
+        console.log("Request rejected with success:", localId, "haya guest id", guestId);
+
+        const updatedRequests = myRequests.filter(request => request.localId !== localId);
+        setMyRequests(updatedRequests);
+    } catch (error) {
+        console.error('Error rejecting request:', error);
+    }
+};
+
+    
+
+
     //this fct takes the event coming from that button
     //
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:8080/Auth/Update/${id}`, {idU: '',//these get filled from the form
-                firstName,lastName,password,});
+            const response = await axios.put(`http://localhost:8080/Auth/Update/${id}`, {
+                idU: '',//these get filled from the form
+                firstName, lastName, password,
+            });
             setUser(response.data);
             setParameters(false);
-          
+
         } catch (error) {
             console.error('Error updating profile:', error);
         }
@@ -106,6 +201,10 @@ const MyProfile = () => {
     const handleHideB = () => {
         setMyBookings(false);
     };
+    const handleHideR = () => {
+        setShowRequests(false);
+    };
+
     const handleHideH = () => {
         setMyHostings(false);
     };
@@ -143,7 +242,6 @@ const MyProfile = () => {
                                                 type="text"
                                                 id="firstName"
                                                 className="form-control"
-                                                required
                                                 value={firstName}
                                                 onChange={(e) => setFirstName(e.target.value)}
                                             />
@@ -154,7 +252,6 @@ const MyProfile = () => {
                                                 type="text"
                                                 id="lastName"
                                                 className="form-control"
-                                                required
                                                 value={lastName}
                                                 onChange={(e) => setLastName(e.target.value)}
                                             />
@@ -165,7 +262,6 @@ const MyProfile = () => {
                                                 type="password"
                                                 id="password"
                                                 className="form-control"
-                                                required
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
@@ -219,7 +315,7 @@ const MyProfile = () => {
                                                         <button
                                                             type="button"
                                                             className="btn btn-danger"
-                                                            onClick={() => handleCancelBooking(booking.idB)}> 
+                                                            onClick={() => handleCancelBooking(booking.idB)}>
                                                             Cancel
                                                         </button>
                                                     </td>
@@ -235,6 +331,61 @@ const MyProfile = () => {
                                     </div>
                                 </div>
                             ) : null}
+
+                        </div>
+                        <div className="p-4  text-black" style={{ backgroundColor: '#f8f9fa' }}>
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-dark" data-mdb-ripple-color="dark" style={{ zIndex: '1' }} onClick={handleMyRequests}>
+                                My Requests
+                            </button>
+
+                            {showRequests ? (
+                                <div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Local Id</th>
+                                                <th>Local Title</th>
+                                                <th>Guest Name</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {myRequests.map((request, index) => (
+                                                <tr key={index}>
+                                                    <td>{request.localId}</td>
+                                                    <td>{request.localName}</td>
+                                                    <td>{request.guestName.match(/^(.*?) \(User ID:/)[1]}</td>
+                                                    <td>
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-success"
+                                                            onClick={() => handleAcceptRequest(request.localId, request.guestId)}>
+                                                            Accept
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-danger"
+                                                            onClick={() => handleCancelRequest(request.localId, request.guestId)}>
+                                                            Reject
+                                                        </button>
+
+                                                    </td>
+                                                </tr>
+                                            ))}
+
+                                        </tbody>
+                                    </table>
+
+                                    <div className="form-group">
+                                        <button type="button" className="btn btn-secondary" onClick={handleHideRequests}>
+                                            Hide
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : null}
+
+
+
 
                         </div>
                         <div className="p-4  text-black" style={{ backgroundColor: '#f8f9fa' }}>
