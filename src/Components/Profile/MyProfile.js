@@ -3,13 +3,16 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import Navbar from "../Reservation/Component/Navbar";
+import Footer from "../Reservation/Component/Footer";
+import ModalProfile from "./Component/ModalProfile";
 
 const MyProfile = () => {
     const [user, setUser] = useState(null);
     const { id } = useParams(); //bach nakhod les parametres men URL
     const [parameters, setParameters] = useState(false);
     const navigate = useNavigate();
-    const cookieValue = Cookies.get('UserId') || '';
+    const [cookieValue, setCookieValue] = useState(Cookies.get('UserId') || '');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
@@ -52,11 +55,10 @@ const MyProfile = () => {
         }
     };
 
-
-
     const handleEditProfile = () => {
         setParameters(true);
     };
+
     const handleMyRequests = async (event) => {
         event.preventDefault();
         try {
@@ -106,10 +108,10 @@ const MyProfile = () => {
         }
     };
 
-
     const handleHideRequests = () => {
         setShowRequests(false); // Set showRequests to false to hide the requests table
     };
+
     const handleMyBookings = async (event) => {
         event.preventDefault();
         try {
@@ -138,6 +140,8 @@ const MyProfile = () => {
             console.error('Error fetching hostings:', error);
         }
     };
+
+
     const handleAcceptRequest = async (localId, guestId) => {
     try {
         // Log the data before making the request
@@ -161,7 +165,9 @@ const MyProfile = () => {
         console.error('Error accepting request:', error);
     }
 };
-const handleCancelRequest = async (localId, guestId) => {
+
+
+    const handleCancelRequest = async (localId, guestId) => {
     
     try {
         await axios.delete(`http://localhost:8080/Hostings/RejectRequest/${localId}?guestId=${guestId}`);
@@ -198,9 +204,11 @@ const handleCancelRequest = async (localId, guestId) => {
     const handleCancel = () => {
         setParameters(false);
     };
+
     const handleHideB = () => {
         setMyBookings(false);
     };
+
     const handleHideR = () => {
         setShowRequests(false);
     };
@@ -208,96 +216,113 @@ const handleCancelRequest = async (localId, guestId) => {
     const handleHideH = () => {
         setMyHostings(false);
     };
+
+    const handleLogout = () => {
+        Cookies.remove('UserId');
+        setCookieValue('');
+    };
+
+    const handleLogin = () => {
+        navigate('/Auth/Login');
+    };
+
     if (!user) {
         return null;
     }
 
     return (
-        <section className="h-100 gradient-custom-2">
-            <div className="container py-5 h-100">
-                <div className="row d-flex justify-content-center align-items-center h-100">
-                    <div className="col col-lg-9 col-xl-7">
-                        <div className="card">
-                            <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
-                                <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
-                                    <img
-                                        src={`data:image/png;base64,${user.img}`}
-                                        alt="Generic placeholder image"
-                                        className="img-fluid img-thumbnail mt-4 mb-2"
-                                        style={{ width: '150px', zIndex: '1' }}
-                                    />
-                                </div>
-                                {user ? (
-                                    <div className="ms-3" style={{ marginTop: '130px' }}>
-                                        <h5>{user.firstName} {user.lastName}</h5>
-                                        <p>New York</p>
+        <React.Fragment>
+            <Navbar cookie={Cookies} cookieValue={cookieValue}  handleLogin={handleLogin} handleLogout={handleLogout} />
+            <section className="w-100 pt-5 h-100 gradient-custom-2">
+                <div className="container py-5 h-100">
+                    <div className="row d-flex justify-content-center align-items-center h-100">
+                        <div className="col col-lg-9 col-xl-7">
+                            <div className="card">
+                                <div className="rounded-top text-white d-flex flex-row"
+                                     style={{backgroundColor: '#000', height: '200px'}}>
+                                    <div className="ms-4 mt-5 d-flex flex-column" style={{width: '150px'}}>
+                                        <img
+                                            src={`data:image/png;base64,${user.img}`}
+                                            alt="Generic placeholder image"
+                                            className="img-fluid img-thumbnail mt-4 mb-2"
+                                            style={{width: '150px', zIndex: '1'}}
+                                        />
                                     </div>
-                                ) : null}
+                                    {user ? (
+                                        <div className="ms-3" style={{marginTop: '130px'}}>
+                                            <h5>{user.firstName} {user.lastName}</h5>
+                                            <p>New York</p>
+                                        </div>
+                                    ) : null}
+                                </div>
+                                <div className="p-4  text-black" style={{backgroundColor: '#f8f9fa'}}>
+                                    <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                            className="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                                            style={{zIndex: '1'}} onClick={handleEditProfile}>
+                                        Edit profile
+                                    </button>
+                                    {parameters ? (
+                                        <form onSubmit={handleSubmit}>
+                                            <div className="form-group mb-4">
+                                                <label htmlFor="firstName">Change First Name</label>
+                                                <input
+                                                    type="text"
+                                                    id="firstName"
+                                                    className="form-control"
+                                                    value={firstName}
+                                                    onChange={(e) => setFirstName(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="form-group mb-4">
+                                                <label htmlFor="lastName">Change Last Name</label>
+                                                <input
+                                                    type="text"
+                                                    id="lastName"
+                                                    className="form-control"
+                                                    value={lastName}
+                                                    onChange={(e) => setLastName(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="form-group mb-4">
+                                                <label htmlFor="password">Change Password</label>
+                                                <input
+                                                    type="password"
+                                                    id="password"
+                                                    className="form-control"
+                                                    value={password}
+                                                    onChange={(e) => setPassword(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-primary me-2">
+                                                    Submit
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-secondary"
+                                                    onClick={handleCancel}>
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    ) : null}
+                                </div>
+
+
                             </div>
-                            <div className="p-4  text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                                <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-dark" data-mdb-ripple-color="dark" style={{ zIndex: '1' }} onClick={handleEditProfile}>
-                                    Edit profile
+                            <div className="p-4  text-black" style={{backgroundColor: '#f8f9fa'}}>
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                        className="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                                        style={{zIndex: '1'}} onClick={handleMyBookings}>
+                                    My Bookings
                                 </button>
-                                {parameters ? (
-                                    <form onSubmit={handleSubmit}>
-                                        <div className="form-group mb-4">
-                                            <label htmlFor="firstName">Change First Name</label>
-                                            <input
-                                                type="text"
-                                                id="firstName"
-                                                className="form-control"
-                                                value={firstName}
-                                                onChange={(e) => setFirstName(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="form-group mb-4">
-                                            <label htmlFor="lastName">Change Last Name</label>
-                                            <input
-                                                type="text"
-                                                id="lastName"
-                                                className="form-control"
-                                                value={lastName}
-                                                onChange={(e) => setLastName(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="form-group mb-4">
-                                            <label htmlFor="password">Change Password</label>
-                                            <input
-                                                type="password"
-                                                id="password"
-                                                className="form-control"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <button
-                                                type="submit"
-                                                className="btn btn-primary me-2">
-                                                Submit
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="btn btn-secondary"
-                                                onClick={handleCancel}>
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    </form>
-                                ) : null}
-                            </div>
 
-
-                        </div>
-                        <div className="p-4  text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-dark" data-mdb-ripple-color="dark" style={{ zIndex: '1' }} onClick={handleMyBookings}>
-                                My Bookings
-                            </button>
-
-                            {myBookings ? (
-                                <div>
-                                    <table>
-                                        <thead>
+                                {myBookings ? (
+                                    <div>
+                                        <table>
+                                            <thead>
                                             <tr>
                                                 <th>Date Booked</th>
                                                 <th>Start Date</th>
@@ -306,8 +331,8 @@ const handleCancelRequest = async (localId, guestId) => {
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
-                                        </thead>
-                                        <tbody>
+                                            </thead>
+                                            <tbody>
                                             {myBookings.map((booking) => (
                                                 <tr key={booking.idB}>
                                                     <td>{booking.dateB}</td>
@@ -325,35 +350,37 @@ const handleCancelRequest = async (localId, guestId) => {
                                                     </td>
                                                 </tr>
                                             ))}
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
 
-                                    <div className="form-group">
-                                        <button type="button" className="btn btn-secondary" onClick={handleHideB}>
-                                            Hide
-                                        </button>
+                                        <div className="form-group">
+                                            <button type="button" className="btn btn-secondary" onClick={handleHideB}>
+                                                Hide
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            ) : null}
+                                ) : null}
 
-                        </div>
-                        <div className="p-4  text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-dark" data-mdb-ripple-color="dark" style={{ zIndex: '1' }} onClick={handleMyRequests}>
-                                My Requests
-                            </button>
+                            </div>
+                            <div className="p-4  text-black" style={{backgroundColor: '#f8f9fa'}}>
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                        className="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                                        style={{zIndex: '1'}} onClick={handleMyRequests}>
+                                    My Requests
+                                </button>
 
-                            {showRequests ? (
-                                <div>
-                                    <table>
-                                        <thead>
+                                {showRequests ? (
+                                    <div>
+                                        <table>
+                                            <thead>
                                             <tr>
                                                 <th>Local Id</th>
                                                 <th>Local Title</th>
                                                 <th>Guest Name</th>
                                                 <th>Action</th>
                                             </tr>
-                                        </thead>
-                                        <tbody>
+                                            </thead>
+                                            <tbody>
                                             {myRequests.map((request, index) => (
                                                 <tr key={index}>
                                                     <td>{request.localId}</td>
@@ -377,60 +404,69 @@ const handleCancelRequest = async (localId, guestId) => {
                                                 </tr>
                                             ))}
 
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
 
-                                    <div className="form-group">
-                                        <button type="button" className="btn btn-secondary" onClick={handleHideRequests}>
-                                            Hide
-                                        </button>
+                                        <div className="form-group">
+                                            <button type="button" className="btn btn-secondary"
+                                                    onClick={handleHideRequests}>
+                                                Hide
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            ) : null}
+                                ) : null}
 
 
+                            </div>
+                            <div className="p-4  text-black" style={{backgroundColor: '#f8f9fa'}}>
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                        className="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                                        style={{zIndex: '1'}} onClick={handleMyHostings}>
+                                    My Hostings
+                                </button>
 
-
-                        </div>
-                        <div className="p-4  text-black" style={{ backgroundColor: '#f8f9fa' }}>
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-dark" data-mdb-ripple-color="dark" style={{ zIndex: '1' }} onClick={handleMyHostings}>
-                                My Hostings
-                            </button>
-
-                            {myHostings ? (
-                                <div>
-                                    {myHostings.map((hosting, index) => (
-                                        <div key={index} className="card mb-3">
-                                            <div className="row g-0">
-                                                <div className="col-md-4">
-                                                    <img src={`data:image/png;base64,${hosting.imgPathList[0]}`} className="img-fluid rounded-start" alt="Hosting" />
-                                                </div>
-                                                <div className="col-md-8">
-                                                    <div className="card-body">
-                                                        <h5 className="card-title">{hosting.name}</h5>
-                                                        <p className="card-text">{hosting.descLocal}</p>
-                                                        <p className="card-text"><strong>Address:</strong> {hosting.addresse}, {hosting.city}</p>
-                                                        <p className="card-text"><strong>Type:</strong> {hosting.type}</p>
-                                                        <p className="card-text"><strong>Price:</strong> {hosting.price} DH</p>
+                                {myHostings ? (
+                                    <div>
+                                        {myHostings.map((hosting, index) => (
+                                            <div key={index} className="card mb-3">
+                                                <div className="row g-0">
+                                                    <div className="col-md-4">
+                                                        <img src={`data:image/png;base64,${hosting.imgPathList[0]}`}
+                                                             className="img-fluid rounded-start" alt="Hosting"/>
+                                                    </div>
+                                                    <div className="col-md-8">
+                                                        <div className="card-body">
+                                                            <h5 className="card-title">{hosting.name}</h5>
+                                                            <p className="card-text">{hosting.descLocal}</p>
+                                                            <p className="card-text">
+                                                                <strong>Address:</strong> {hosting.addresse}, {hosting.city}
+                                                            </p>
+                                                            <p className="card-text">
+                                                                <strong>Type:</strong> {hosting.type}</p>
+                                                            <p className="card-text">
+                                                                <strong>Price:</strong> {hosting.price} DH</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        ))}
+                                        <div className="form-group">
+                                            <button type="button" className="btn btn-secondary" onClick={handleHideH}>
+                                                Hide
+                                            </button>
                                         </div>
-                                    ))}
-                                    <div className="form-group">
-                                        <button type="button" className="btn btn-secondary" onClick={handleHideH}>
-                                            Hide
-                                        </button>
                                     </div>
-                                </div>
-                            ) : null}
+                                ) : null}
 
 
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <Footer/>
+        </React.Fragment>
     );
 }
 
