@@ -11,7 +11,7 @@ const Navbar = ({cookie,cookieValue, handleLogin, handleLogout}) => {
                                                           src="/Images/logoBlack.png" alt="Logo"/></a>
                 <div className="row justify-content-end">
                     <div className="col-auto">
-                        <a type="button" className="btn text-decoration-none btn-light">Host on Comfy Rental</a>
+                        <a type="button" href="/Host" className="btn text-decoration-none btn-light">Host on Comfy Rental</a>
                     </div>
                     <div className="col-auto">
                         <div className="dropdown-center">
@@ -30,7 +30,7 @@ const Navbar = ({cookie,cookieValue, handleLogin, handleLogout}) => {
                                         <li><a onClick={handleLogin} className="dropdown-item">Login</a></li>
                                     </React.Fragment>                           )}
                                  <hr/>
-                                <li><a className="dropdown-item" href="#">Host on Comfy Rental</a></li>
+                                <li><a className="dropdown-item" href="/Host">Host on Comfy Rental</a></li>
                             </ul>
                         </div>
                     </div>

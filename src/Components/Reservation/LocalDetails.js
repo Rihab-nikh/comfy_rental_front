@@ -1,113 +1,197 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import image1 from '../Local/Images/image1.jpg';
-import image2 from '../Local/Images/image2.jpg';
-import image3 from '../Local/Images/image3.jpg';
-import image4 from '../Local/Images/image4.jpg';
+import Navbar from "./Component/Navbar";
+import Cookies from "js-cookie";
+import Footer from "./Component/Footer";
+import ProfileCard from "./Component/ProfileCard";
+
 
 const LocalDetails = () => {
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
     const { id } = useParams();
     const [local, setLocal] = useState(null);
-    const [arrivalDate, setArrivalDate] = useState(null);
-    const [departureDate, setDepartureDate] = useState(null);
+    const [cookieValue, setCookieValue] = useState(Cookies.get('UserId') || '');
+    const navigate = useNavigate();
+    const [localId, setLocalId] = useState(null);
+    const [userId, setUserId] = useState(null);
+
+    const BookingHandler=(e,navigate)=>{
+        if (!cookieValue) {
+            navigate('/Auth/Login');
+        }
+        else {
+            setUserId(cookieValue);
+            handleBooking(e);
+        }
+    }
+    const handleLogout = () => {
+        Cookies.remove('UserId');
+        setCookieValue('');
+    };
+
+    const handleLogin = () => {
+        navigate('/Auth/Login');
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/local/LocalDetails/${id}`);
-                setLocal(response.data)
-                console.log(local.imgPathList)
+                setLocal(response.data);
+                setLocalId(response.data.localId);
             } catch (error) {
                 console.error('Error fetching Local:', error);
             }
         };
-
         fetchData();
     }, [id]);
+    const handleBooking = async (e) => {
+        e.preventDefault();
 
-    const images = local.imgPathList;
-    if (!local) {
-        return <div>Loading...</div>;
+        try {
+            const response = await axios.post('http://localhost:8080/Reservations/save', {
+                localId, userId
+            });
+            if (response.data){
+                setShowPopup(true);
+                setPopupMessage(response.data);
+            }
+            else {
+                setShowPopup(true);
+                setPopupMessage('Error ReBook :(');
+            }
+        }catch (error) {
+
+            setShowPopup(true);
+            setPopupMessage('Connexion Error');
+
+        }
     }
-    return (
-        <div className="container bg-light">
-            <div className="row">
-                <div className="col-9">
-                    <h1>{local.name}</h1>
-                </div>
-                <div className="col-3">
-                    <p>Add to favorite</p>
-                </div>
 
+    if (!local) {
+        return <div className="h-100 w-100 text-center  m-auto" style={{height:30+"em"}}>
+            <div className="spinner-border" style={{width:"3em", height:"3em"}} role="status">
+                <span className="visually-hidden">Loading...</span>
             </div>
-            <div className="row">
-                <div className="col-6">
-                    <img className="m-1 img-fluid" src={images[0]} alt="Image 1"/>
-                </div>
-                <div className="col-6">
-                    <div className="row">
-                        <div className="col-6">
-                            <img className="m-1 img-fluid" src={images[1]} alt="Image 2" />
-                        </div>
-                        <div className="col-6">
-                            <img className="m-1 img-fluid" src={images[2]} alt="Image 3" />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-6">
-                            <img className="m-1 img-fluid" src={images[3]} alt="Image 4" />
-                        </div>
-                        <div className="col-6">
-                            <img className="m-1 img-fluid" src={images[4]} alt="Image 5" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="row">
-                <div className="col-6">
-                    <div className="m-2">
-                        <h3>Detail</h3>
-                        <p> {local.descLocal}</p>
-                    </div>
-                </div>
-                <div className="col-6">
-                    <div className="card m-2">
-                        <div className="card-body">
-                        <p className="date-label">Arrival</p>
+        </div>;
+    }
+    else {
+        const images = local.imgPathList;
 
-                            <DatePicker
-                            
-                                selected={arrivalDate}
-                                onChange={date => this.setState({ arrivalDate: date })}
-                                placeholderText="Select date"
-                            />
-                            <div className="booking-option">
-                                <p className="date-label">Departure </p>
-                                <DatePicker
-                                    selected={departureDate}
-                                    onChange={date => this.setState({ departureDate: date })}
-                                    placeholderText="Select date"
-                                />
+        return (
+            <div className="container">
+                <Navbar cookie={Cookies} cookieValue={cookieValue}  handleLogin={handleLogin} handleLogout={handleLogout} />
+                <div className="pt-4">
+                    <div className="container mt-5">
+                        <div className="row mt-5">
+                            <div className="col-9">
+                                <h1 className="m-2">{local.name}</h1>
                             </div>
-                            <div class="subtotal-section">
-                                <p class="subtotal">{local.price} € Per night</p>
-                                
+                            <div className="col-3  text-end">
+                                <a className=" btn my-2 btn-outline-danger">
+                                <i className="bi bi-heart mx-2"></i>Favorite
+                                </a>
                             </div>
-                            
-                            <div class="reservation-section">
-                                <button class="reserve-button">Réserver</button>
-                                <p class="reservation-info">Aucun montant ne vous sera débité pour le moment</p>
 
+                        </div>
+
+                        <div className="row m-3 border-1">
+                            <div className="col-6">
+                                <img style={{width: "40em", height: "28.5em"}} className="m-1 rounded-1 img-fluid"
+                                     src={`data:image/png;base64,${images[0]}`} alt="Image 1"/>
+                            </div>
+                            <div className="col-6">
+                                <div className="row">
+                                    <div className="col-6">
+                                        <img style={{width: "40em", height: "14em"}} className="m-1 rounded-1 img-fluid"
+                                             src={`data:image/png;base64,${images[1]}`} alt="Image 2"/>
+                                    </div>
+                                    <div className="col-6">
+                                        <img style={{width: "40em", height: "14em"}} className="m-1 rounded-1 img-fluid"
+                                             src={`data:image/png;base64,${images[2]}`} alt="Image 3"/>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-6">
+                                        <img style={{width: "40em", height: "14em"}} className="m-1 rounded-1 img-fluid"
+                                             src={`data:image/png;base64,${images[3]}`} alt="Image 4"/>
+                                    </div>
+                                    <div className="col-6">
+                                        <img style={{width: "40em", height: "14em"}} className="m-1 rounded-1 img-fluid"
+                                             src={`data:image/png;base64,${images[4]}`} alt="Image 5"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div className="row">
+                            <div className="col-6">
+                                <div className="m-2 row">
+                                    <h3>Detail</h3>
+                                    <p> {local.descLocal}</p>
+                                    <p><span className="fw-bold">Adresse</span> : {local.addresse} </p>
+                                    <p><span className="fw-bold">City</span> : {local.city} </p>
+                                </div>
+                            <ProfileCard name={local.hostName} imgSrc={local.hostPic}/>
+                            </div>
+                            <div className="col-6 p-2">
+                                <div className="card h-100 " >
+                                    <div className="row card-body">
+                                        <div className="col-6">
+                                            <h6 className="form-text">Arrival</h6>
+                                            <DatePicker
+                                                className=" form-control"
+                                                selected={local.dateStart}
+                                                onChange={date => this.setState({arrivalDate: date})}
+                                                placeholderText={local.dateStart}
+                                            />
+                                        </div>
+                                        <div  className="col-6">
+                                            <h6 className="form-text">Departure</h6>
+                                            <DatePicker
+                                                className=" form-control"
+                                                selected={local.dateEnd}
+                                                onChange={date => this.setState({departureDate: date})}
+                                                placeholderText={local.dateEnd}
+                                            />
+                                        </div>
+                                        <hr/>
+
+                                        <div className="row">
+
+                                            <div className="subtotal-section">
+                                                {showPopup && (
+                                                    <div className="row alert ms-2 alert-dark" role="alert">
+                                                        {popupMessage}
+                                                    </div>
+                                                )}
+                                                <h5 className="text-end"><span className="fw-bold">{local.price}</span> € Per night</h5>
+
+                                            </div>
+
+                                            <div className="text-end">
+                                                <button onClick={(e) => BookingHandler(e,navigate)}  className=" btn btn-outline-dark ">Book now</button>
+                                                <p className="text-start">No amount will be charged to you at the moment.</p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
+
+                <Footer/>
             </div>
-        </div>
-    );
+        );
+    }
+
 }
 
 export default LocalDetails;

@@ -14,12 +14,14 @@ const card = ({localId,imgList,title,price,DateStart,DateEnd}) => {
                             aria-label="Slide 3"></button>
                     <button type="button" data-bs-target={`#carouselExample${localId}Indicators`} data-bs-slide-to="3"
                             aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target={`#carouselExample${localId}Indicators`} data-bs-slide-to="4"
+                             aria-label="Slide 5"></button>
                 </div>
 
                 <div className="carousel-inner">
                     {imgList.map((img, index) => (
                         <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
-                            <img style={{width: 25 + 'em', height: 15+ 'em'}} src={img} className="rounded d-block w-100"  alt={`Slide ${index + 1}`} />
+                            <img style={{width: 25 + 'em', height: 15+ 'em'}} src={`data:image/png;base64,${img}`} className="rounded d-block w-100"  alt={`Slide ${index + 1}`} />
                         </div>
                     ))}
                 </div>
