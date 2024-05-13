@@ -70,7 +70,7 @@ const MyProfile = () => {
                 const localId = localTitle.match(/\d+/)[0]; // Extract digits from the title
 
                 // Extract guest ID from the guestName
-                const userIdMatch = guestName.match(/User ID: (\w+)/);
+                const userIdMatch = guestName.match(/User ID: (\w+-\w+-\w+-\w+-\w+)/);
                 const userId = userIdMatch ? userIdMatch[1] : ''; // Extract user ID if present
 
                 // Check if localId already exists in idPairs
